@@ -362,11 +362,8 @@ def main():
     if args.evaluate:
         acc1, acc5 = validate(test_loader, model, criterion, args)
     mask = []
-    for layer in model.modules():
-        if isinstance(layer, nn.Conv2d) or isinstance(layer, nn.Linear):
-            print(type(layer))
-            print(dir(layer))
-            mask.append(torch.abs(layer))
+    for parameter in model.parameters():
+        mask.append(parameter)
     params_kept = torch.sum(torch.cat([torch.flatten(x == 1) for x in mask]))
     total_params = len(mask)
     print(f"prune percentage: {(total_params-params_kept)*100/total_params}%, {params_kept} parameters kept, {total_params-params_kept} parameters pruned")
