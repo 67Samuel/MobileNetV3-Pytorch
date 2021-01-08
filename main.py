@@ -333,7 +333,10 @@ def main():
 
     if args.load_pretrained or args.evaluate:
         filename = "best_model_" + str(args.model_mode)
-        checkpoint = torch.load('./checkpoint/' + filename + '_ckpt.t7')
+		if args.load_pretrained:
+        	checkpoint = torch.load('./checkpoint/' + filename + '_ckpt.t7')
+		else:
+			checkpoint = torch.load('./checkpoint/' + filename + '.txt')
         model.load_state_dict(checkpoint['model'])
         epoch = checkpoint['epoch']
         acc1 = checkpoint['best_acc1']
@@ -358,6 +361,13 @@ def main():
 
     if args.evaluate:
         acc1, acc5 = validate(test_loader, model, criterion, args)
+	mask = []
+        for layer in net.modules():
+            if isinstance(layer, nn.Conv2d) or isinstance(layer, nn.Linear):
+                mask.append(torch.abs(layer.weight_mask.grad))
+	params_kept = torch.sum(torch.cat([torch.flatten(x == 1) for x in mask]))
+	total_params = len(mask)
+	print(f"prune percentage: {(total_params-params_kept)*100/total_params}%, {params_kept} parameters kept, {total_params-params_kept} parameters pruned")
         print("Acc1: ", acc1, "Acc5: ", acc5)
         return
 
