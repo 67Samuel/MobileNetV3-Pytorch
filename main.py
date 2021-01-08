@@ -349,7 +349,7 @@ def main():
         print(f"Pruning {args.snip_percentage}% of weights with SNIP...")
         # get snip factor in form required for SNIP function
         snip_factor = (100 - args.snip_percentage)/100
-        keep_masks = SNIP(model, snip_factor, dataloader, device)
+        keep_masks = SNIP(model, snip_factor, train_loader, device)
         apply_prune_mask(model, keep_masks)
 
     optimizer = optim.SGD(model.parameters(), lr=args.learning_rate, weight_decay=1e-5, momentum=0.9)
