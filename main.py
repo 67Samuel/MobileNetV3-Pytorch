@@ -346,7 +346,7 @@ def main():
         best_acc1 = 0
         
     if args.prune:
-        print(f"Pruning {args.snip}% of weights with SNIP...")
+        print(f"Pruning {args.snip_percentage}% of weights with SNIP...")
         # get snip factor in form required for SNIP function
         snip_factor = (100 - args.snip_percentage)/100
         keep_masks = SNIP(model, snip_factor, dataloader, device)
