@@ -107,7 +107,7 @@ def SNIP(net, keep_ratio, train_dataloader, device, img_size=None, num_channels=
     for g in grads_abs:
         keep_masks.append(((g / norm_factor) >= acceptable_score).float())
 
-    print(f"{torch.sum(torch.cat([torch.flatten(x == 1) for x in keep_masks]))} parameters kept out of {torch.sum(torch.cat([torch.flatten(x) for x in keep_masks]))}")
+    print(f"{torch.sum(torch.cat([torch.flatten(x == 1) for x in keep_masks]))} parameters kept, {torch.sum(torch.cat([torch.flatten(x==0) for x in keep_masks]))} parameters pruned")
 
     return(keep_masks)
 
