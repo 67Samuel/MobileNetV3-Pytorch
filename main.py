@@ -364,8 +364,8 @@ def main():
     mask = []
     for layer in model.modules():
         if isinstance(layer, nn.Conv2d) or isinstance(layer, nn.Linear):
-		    print(type(layer))
-			print(dir(layer))
+            print(type(layer))
+            print(dir(layer))
             mask.append(torch.abs(layer))
     params_kept = torch.sum(torch.cat([torch.flatten(x == 1) for x in mask]))
     total_params = len(mask)
