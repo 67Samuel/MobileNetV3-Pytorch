@@ -332,10 +332,10 @@ def main():
 
     if args.load_pretrained or args.evaluate:
         filename = "best_model_" + str(args.model_mode)
-		if args.load_pretrained:
-        	checkpoint = torch.load('./checkpoint/' + filename + '_ckpt.t7')
-		else:
-			checkpoint = torch.load('./checkpoint/' + filename + '.txt')
+        if args.load_pretrained:
+            checkpoint = torch.load('./checkpoint/' + filename + '_ckpt.t7')
+        else:
+            checkpoint = torch.load('./checkpoint/' + filename + '.txt')
         model.load_state_dict(checkpoint['model'])
         epoch = checkpoint['epoch']
         acc1 = checkpoint['best_acc1']
