@@ -364,7 +364,9 @@ def main():
     mask = []
     for layer in model.modules():
         if isinstance(layer, nn.Conv2d) or isinstance(layer, nn.Linear):
-            mask.append(torch.abs(layer.weight_mask.grad))
+		    print(type(layer))
+			print(dir(layer))
+            mask.append(torch.abs(layer))
     params_kept = torch.sum(torch.cat([torch.flatten(x == 1) for x in mask]))
     total_params = len(mask)
     print(f"prune percentage: {(total_params-params_kept)*100/total_params}%, {params_kept} parameters kept, {total_params-params_kept} parameters pruned")
