@@ -145,18 +145,18 @@ def apply_prune_mask(net, keep_masks):
 
 
 def initialize_xavier_normal(layer):
-	"""
-	Function to initialize a layer by picking weights from a xavier normal distribution
-	Arguments
-	---------
-	layer : The layer of the neural network
-	Returns
-	-------
-	None
-	"""
-	if type(layer) == nn.Conv2d:
-		torch.nn.init.xavier_normal_(layer.weight)
-		layer.bias.data.fill_(0)
+    """
+    Function to initialize a layer by picking weights from a xavier normal distribution
+    Arguments
+    ---------
+    layer : The layer of the neural network
+    Returns
+    -------
+    None
+    """
+    if type(layer) == nn.Conv2d:
+        torch.nn.init.xavier_normal_(layer.weight)
+        layer.bias.data.fill_(0)
 
 
 def adjust_learning_rate(optimizer, epoch, args):
@@ -361,13 +361,13 @@ def main():
 
     if args.evaluate:
         acc1, acc5 = validate(test_loader, model, criterion, args)
-        mask = []
+    mask = []
         for layer in net.modules():
             if isinstance(layer, nn.Conv2d) or isinstance(layer, nn.Linear):
                 mask.append(torch.abs(layer.weight_mask.grad))
-	params_kept = torch.sum(torch.cat([torch.flatten(x == 1) for x in mask]))
-	total_params = len(mask)
-	print(f"prune percentage: {(total_params-params_kept)*100/total_params}%, {params_kept} parameters kept, {total_params-params_kept} parameters pruned")
+    params_kept = torch.sum(torch.cat([torch.flatten(x == 1) for x in mask]))
+    total_params = len(mask)
+    print(f"prune percentage: {(total_params-params_kept)*100/total_params}%, {params_kept} parameters kept, {total_params-params_kept} parameters pruned")
         print("Acc1: ", acc1, "Acc5: ", acc5)
         return
 
