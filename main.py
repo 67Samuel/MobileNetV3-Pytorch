@@ -360,15 +360,15 @@ def main():
     criterion = nn.CrossEntropyLoss().to(device)
 
     if args.evaluate:
-        acc1, acc5 = validate(test_loader, model, criterion, args)
-    mask = []
-    for parameter in model.parameters():
-        mask.append(parameter)
-    params_kept = torch.sum(torch.cat([torch.flatten(x == 1) for x in mask]))
-    total_params = len(mask)
-    print(f"prune percentage: {(total_params-params_kept)*100/total_params}%, {params_kept} parameters kept, {total_params-params_kept} parameters pruned")
-    print("Acc1: ", acc1, "Acc5: ", acc5)
-    return
+        #acc1, acc5 = validate(test_loader, model, criterion, args)
+        #mask = []
+        #for parameter in model.parameters():
+        #    mask.append(parameter)
+        #params_kept = torch.sum(torch.cat([torch.flatten(x == 1) for x in mask]))
+        #total_params = len(mask)
+        #print(f"prune percentage: {(total_params-params_kept)*100/total_params}%, {params_kept} parameters kept, {total_params-params_kept} parameters pruned")
+        #print("Acc1: ", acc1, "Acc5: ", acc5)
+        return
 
     if not os.path.isdir("reporting"):
         os.mkdir("reporting")
