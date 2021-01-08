@@ -360,7 +360,7 @@ def main():
 
     if args.evaluate:
         acc1, acc5 = validate(test_loader, model, criterion, args)
-    mask = []
+        mask = []
         for layer in net.modules():
             if isinstance(layer, nn.Conv2d) or isinstance(layer, nn.Linear):
                 mask.append(torch.abs(layer.weight_mask.grad))
