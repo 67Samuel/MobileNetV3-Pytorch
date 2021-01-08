@@ -362,7 +362,7 @@ def main():
     if args.evaluate:
         acc1, acc5 = validate(test_loader, model, criterion, args)
     mask = []
-    for layer in net.modules():
+    for layer in model.modules():
         if isinstance(layer, nn.Conv2d) or isinstance(layer, nn.Linear):
             mask.append(torch.abs(layer.weight_mask.grad))
     params_kept = torch.sum(torch.cat([torch.flatten(x == 1) for x in mask]))
