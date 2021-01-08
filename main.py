@@ -32,6 +32,7 @@ def get_args():
     parser.add_argument('--distributed', type=bool, default=False)
     parser.add_argument('--prune', type=str, default=None)
     parser.add_argument('--snip-percentage', type=int, default=0)
+    parser.add_argument('--prefix', type=str, default="")
 
     args = parser.parse_args()
 
@@ -335,7 +336,7 @@ def main():
         if args.load_pretrained:
             checkpoint = torch.load('./checkpoint/' + filename + '_ckpt.t7')
         else:
-            checkpoint = torch.load('./checkpoint/' + filename + '.txt')
+            checkpoint = torch.load('./checkpoint/' + filename + args.prefix + '.txt')
         model.load_state_dict(checkpoint['model'])
         epoch = checkpoint['epoch']
         acc1 = checkpoint['best_acc1']
@@ -374,7 +375,7 @@ def main():
         os.mkdir("reporting")
 
     start_time = time.time()
-    with open("./reporting/" + "best_model_" + args.model_mode + ".txt", "w") as f:
+    with open("./reporting/" + "best_model_" + args.model_mode + args.prefix + ".txt", "w") as f:
         for epoch in range(epoch, args.epochs):
             adjust_learning_rate(optimizer, epoch, args)
             train(train_loader, model, criterion, optimizer, epoch, args)
