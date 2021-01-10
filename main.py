@@ -9,6 +9,7 @@ import argparse
 from tqdm import tqdm
 import time
 import os
+from collections import OrderedDict
 
 use_cuda = torch.cuda.is_available()
 device = torch.device("cuda" if use_cuda else "cpu")
@@ -334,7 +335,21 @@ def main():
     if args.load_pretrained or args.evaluate:
         filename = "best_model_" + str(args.model_mode)
         checkpoint = torch.load('./checkpoint/' + filename + '_ckpt.t7')
-        model.load_state_dict(checkpoint['model'])
+        
+        state_dict =checkpoint['model']
+        try:
+            model.load_state_dict(state_dict) 
+        except:
+            non_data_parallel_state_dict = OrderedDict()
+
+            for k, v in state_dict.items():
+                if 'module' not in k:
+                    k = 'module.'+k
+                else:
+                    k = k.replace('features.module.', 'module.features.')
+                non_data_parallel_state_dict[k]=v
+
+            model.load_state_dict(non_data_parallel_state_dict) 
         epoch = checkpoint['epoch']
         acc1 = checkpoint['best_acc1']
         acc5 = checkpoint['best_acc5']
@@ -383,6 +398,7 @@ def main():
             if is_best:
                 print('Saving..')
                 best_acc5 = acc5
+                
                 state = {
                     'model': model.state_dict(),
                     'best_acc1': best_acc1,
