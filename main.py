@@ -333,7 +333,7 @@ def main():
         model = nn.DataParallel(model).to(device)
 
     if args.load_pretrained or args.evaluate:
-        filename = "best_model_" + str(args.model_mode)
+        filename = "best_model_" + str(args.model_mode) +str(args.prefix)
         try:
             dp_model = torch.load('./checkpoint/' + filename + '_dp_model.t7')
             model.load_state_dict(dp_model) 
