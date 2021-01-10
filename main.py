@@ -333,10 +333,7 @@ def main():
 
     if args.load_pretrained or args.evaluate:
         filename = "best_model_" + str(args.model_mode)
-        if args.load_pretrained:
-            checkpoint = torch.load('./checkpoint/' + filename + '_ckpt.t7')
-        else:
-            checkpoint = torch.load('./checkpoint/' + filename + args.prefix + '.txt')
+        checkpoint = torch.load('./checkpoint/' + filename + '_ckpt.t7')
         model.load_state_dict(checkpoint['model'])
         epoch = checkpoint['epoch']
         acc1 = checkpoint['best_acc1']
@@ -360,14 +357,14 @@ def main():
     criterion = nn.CrossEntropyLoss().to(device)
 
     if args.evaluate:
-        #acc1, acc5 = validate(test_loader, model, criterion, args)
-        #mask = []
-        #for parameter in model.parameters():
-        #    mask.append(parameter)
-        #params_kept = torch.sum(torch.cat([torch.flatten(x == 1) for x in mask]))
-        #total_params = len(mask)
-        #print(f"prune percentage: {(total_params-params_kept)*100/total_params}%, {params_kept} parameters kept, {total_params-params_kept} parameters pruned")
-        #print("Acc1: ", acc1, "Acc5: ", acc5)
+        acc1, acc5 = validate(test_loader, model, criterion, args)
+        mask = []
+        for parameter in model.parameters():
+            mask.append(parameter)
+        params_kept = torch.sum(torch.cat([torch.flatten(x == 1) for x in mask]))
+        total_params = len(mask)
+        print(f"prune percentage: {(total_params-params_kept)*100/total_params}%, {params_kept} parameters kept, {total_params-params_kept} parameters pruned")
+        print("Acc1: ", acc1, "Acc5: ", acc5)
         return
 
     if not os.path.isdir("reporting"):
@@ -395,7 +392,7 @@ def main():
                 if not os.path.isdir('checkpoint'):
                     os.mkdir('checkpoint')
                 filename = "best_model_" + str(args.model_mode)
-                torch.save(state, './checkpoint/' + filename + '_ckpt.t7')
+                torch.save(state, './checkpoint/' + filename + args.prefix + '_ckpt.t7')
 
             time_interval = time.time() - start_time
             time_split = time.gmtime(time_interval)
