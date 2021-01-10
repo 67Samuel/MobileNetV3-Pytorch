@@ -334,12 +334,12 @@ def main():
 
     if args.load_pretrained or args.evaluate:
         filename = "best_model_" + str(args.model_mode)
-        checkpoint = torch.load('./checkpoint/' + filename + '_ckpt.t7')
-        
         try:
-            model.load_state_dict(checkpoint['dp_model']) 
+            dp_model = torch.load('./checkpoint/' + filename + '_dp_model.t7')
+            model.load_state_dict(dp_model) 
         except:
-            model.load_state_dict(checkpoint['model']) 
+            checkpoint = torch.load('./checkpoint/' + filename + '_ckpt.t7')
+            model.load_state_dict(checkpoint['model'])
         epoch = checkpoint['epoch']
         acc1 = checkpoint['best_acc1']
         acc5 = checkpoint['best_acc5']
@@ -390,7 +390,6 @@ def main():
                 best_acc5 = acc5
                 
                 state = {
-                    'dp_model': model.module.state_dict(),
                     'model': model.state_dict(),
                     'best_acc1': best_acc1,
                     'best_acc5': best_acc5,
@@ -400,6 +399,7 @@ def main():
                     os.mkdir('checkpoint')
                 filename = "best_model_" + str(args.model_mode)
                 torch.save(state, './checkpoint/' + filename + args.prefix + '_ckpt.t7')
+                torch.save(model.module.state_dict(), './checkpoint/' + filename + args.prefix + '_dp_model.t7')
 
             time_interval = time.time() - start_time
             time_split = time.gmtime(time_interval)
