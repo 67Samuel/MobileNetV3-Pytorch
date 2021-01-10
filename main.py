@@ -336,24 +336,10 @@ def main():
         filename = "best_model_" + str(args.model_mode)
         checkpoint = torch.load('./checkpoint/' + filename + '_ckpt.t7')
         
-        state_dict =checkpoint['model']
         try:
-            model.load_state_dict(state_dict) 
+            model.load_state_dict(checkpoint['dp_model']) 
         except:
-            non_data_parallel_state_dict = OrderedDict()
-
-            for k, v in state_dict.items():
-                if 'module' not in k:
-                    k = 'module.'+k
-                else:
-                    k = k.replace('features.module.', 'module.features.')
-                if k == 'module.out_conv2.2.weight':
-                    k = 'module.out_conv2.3.weight'
-                if k == 'module.out_conv2.2.bias':
-                    k = 'module.out_conv2.3.bias'
-                non_data_parallel_state_dict[k]=v
-
-            model.load_state_dict(non_data_parallel_state_dict) 
+            model.load_state_dict(checkpoint['model']) 
         epoch = checkpoint['epoch']
         acc1 = checkpoint['best_acc1']
         acc5 = checkpoint['best_acc5']
@@ -404,6 +390,7 @@ def main():
                 best_acc5 = acc5
                 
                 state = {
+                    'dp_model': model.module.state_dict(),
                     'model': model.state_dict(),
                     'best_acc1': best_acc1,
                     'best_acc5': best_acc5,
