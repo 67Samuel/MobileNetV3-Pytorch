@@ -30,7 +30,7 @@ def get_args():
     parser.add_argument('--data', default='D:/ILSVRC/Data/CLS-LOC')
     parser.add_argument('--workers', type=int, default=4)
     parser.add_argument('--distributed', type=bool, default=False)
-    parser.add_argument('--prune', type=str, default=None)
+    parser.add_argument('--prune', type=str, default=False)
     parser.add_argument('--snip-percentage', type=int, default=0)
     parser.add_argument('--prefix', type=str, default="")
 
