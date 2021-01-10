@@ -347,6 +347,10 @@ def main():
                     k = 'module.'+k
                 else:
                     k = k.replace('features.module.', 'module.features.')
+                if k == 'module.out_conv2.2.weight':
+                    k = 'module.out_conv2.3.weight'
+                if k == 'module.out_conv2.2.bias':
+                    k = 'module.out_conv2.3.bias'
                 non_data_parallel_state_dict[k]=v
 
             model.load_state_dict(non_data_parallel_state_dict) 
