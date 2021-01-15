@@ -336,8 +336,9 @@ def main():
         filename = "best_model_" + str(args.model_mode) +str(args.prefix)
         try:
             dp_model = torch.load('./checkpoint/' + filename + '_dp_model.t7')
-            model.load_state_dict(dp_model) 
+            model.load_state_dict(dp_model)
         except:
+            print(f'{dp_model} is not found')
             checkpoint = torch.load('./checkpoint/' + filename + '_ckpt.t7')
             model.load_state_dict(checkpoint['model'])
         epoch = checkpoint['epoch']
