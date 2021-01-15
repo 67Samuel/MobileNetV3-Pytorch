@@ -338,7 +338,7 @@ def main():
             dp_model = torch.load('./checkpoint/' + filename + '_dp_model.t7')
             model.load_state_dict(dp_model)
         except:
-            print(f'{'./checkpoint/' + filename + '_dp_model.t7'} is not found')
+            #print(filename+"_dp_model.t7 is not found")
             checkpoint = torch.load('./checkpoint/' + filename + '_ckpt.t7')
             model.load_state_dict(checkpoint['model'])
         epoch = checkpoint['epoch']
